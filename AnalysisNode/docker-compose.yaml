@@ -1,0 +1,21 @@
+services:
+
+    mysql:
+        build: ./mysql
+        container_name: mysqld
+        volumes:
+            - mysql_data:/var/run/mysqld
+        ports:
+            - 3306:3306
+    webapp:
+        build: ./app
+        container_name: webapp
+        restart: always
+        depends_on:
+            - mysql
+        # volumes:
+        #     - ./:/app
+        ports:
+            - 5000:5000
+volumes:
+    mysql_data:
