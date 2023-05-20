@@ -16,6 +16,6 @@ RUN pip install -r requirements.txt
 EXPOSE 5000
 
 # path to executable
-ENTRYPOINT [ "uwsgi" ]
+ENTRYPOINT [ "python" ]
 
-CMD [ "--ini", "uwsgi.ini"]
+CMD ["app.py"]

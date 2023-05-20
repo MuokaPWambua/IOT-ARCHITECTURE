@@ -18,7 +18,7 @@ def temperature():
         return random_number
     
 def humidity():
-    current_month = datetime.datetime.now().month
+    current_month = datetime.now().month
     
     # Check if the current time is between the january and june
     if current_month == 1 or current_month == 6:
