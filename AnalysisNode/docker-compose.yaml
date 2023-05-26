@@ -2,7 +2,7 @@ services:
 
     mysql:
         build: ./mysql
-        container_name: mysqld
+        container_name: mysql
         volumes:
             - mysql_data:/var/run/mysqld
         ports:

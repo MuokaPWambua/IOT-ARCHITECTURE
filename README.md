@@ -1,11 +1,12 @@
+![Alt Text](iot.png)
 # How To:
 You will first need to build each image and create a network to connect each image
 
 ### Build Image
 
-- mysql database `doker build -t mysql AnalysisNode/mysql`
+- mysql database `docker build -t mysql AnalysisNode/mysql`
 
-- webapp `doker build -t webapp AnalysisNode/app`
+- webapp `docker build -t webapp AnalysisNode/app`
 
 - sensor `docker build -t sensor DataSourceNode/app`
 
