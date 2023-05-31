@@ -1,6 +1,10 @@
 import time
 import socketio
 from utils import humidity, temperature
+import os
+
+sensor_id = os.environ.get('SENSOR', 'SENSOR ID')
+host = os.environ.get('HOST', 'http://webapp:5000') # analysis node vm ip
 
 sio = socketio.Client()
 
@@ -12,13 +16,11 @@ def connect():
 def disconnect():
     print('Disconnected from server')
 
-# Sensor ID
-sensor_id = 'sensor1'
 
 if __name__ == '__main__':
     while True:
         try:
-            sio.connect('http://webapp:5000', transports='websocket')
+            sio.connect(host, transports='websocket')
             break
         except socketio.exceptions.ConnectionError as e:
             print(f'Error connecting to server: {e}')

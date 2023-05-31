@@ -1,3 +1,4 @@
+import os
 from flask import Flask, render_template
 from flask_socketio import SocketIO, emit
 import pymysql
@@ -9,7 +10,13 @@ from eventlet import wsgi
 app = Flask(__name__)
 CORS(app)
 
-app.config['SECRET_KEY'] = 'your-secret-key'
+SECRET_KEY = os.environ.get('SECRET_KEY','your-secret-key')
+HOST = os.environ.get('HOST','mysql')
+USER = os.environ.get('USER','app')
+PASSWORD = os.environ.get('PASSWORD','userpassword')
+DB = os.environ.get('DB','analysis')
+
+app.config['SECRET_KEY'] = SECRET_KEY
 
 application = app
 
@@ -22,10 +29,10 @@ socketio = SocketIO(
 )
 
 connection = pymysql.connect(
-    host='mysql',
-    user='app',
-    password='userpassword',
-    db='analysis',
+    host=HOST,
+    user=USER,
+    password=PASSWORD,
+    db=DB,
 )
 
 # Route for the main page
@@ -69,4 +76,4 @@ def handle_sensor_data(data):
         
         
 if __name__ == '__main__':
-    wsgi.server(eventlet.listen(("0.0.0.0", 5000)), app)
+    wsgi.server(eventlet.listen(('', 5000)), app)

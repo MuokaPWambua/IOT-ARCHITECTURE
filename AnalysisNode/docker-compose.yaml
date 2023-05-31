@@ -13,9 +13,8 @@ services:
         restart: always
         depends_on:
             - mysql
-        # volumes:
-        #     - ./:/app
         ports:
             - 5000:5000
+            
 volumes:
     mysql_data:
