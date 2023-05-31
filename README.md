@@ -20,7 +20,10 @@ You will first need to build each image and create a network to connect each ima
 - webapp image:
     `docker run -itp 5000:5000 --network analysis_net --network-alias webapp webapp`
 - sensor:
-    `docker run -itp 5001:5001 --network analysis_net sensor`
+    `docker run -itp 5001:5001 --network analysis_net -e SENSOR='Sensor Name' sensor`
+
+*Note:
+    to achieve this architecture you will need to duplicate the DataSourceNode sensor image on a different vm and give its own environment name which the app will use as the name of the sensor.
 
 ![Alt Text](iot.png)
 
