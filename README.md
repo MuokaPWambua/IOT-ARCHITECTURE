@@ -2,6 +2,11 @@
 # How To:
 You will first need to build each image and create a network to connect each image
 
+### Generate self signed certificate
+this command will generate a self signed certificate inside the `AnalysisNode/app` directory the `key.pem` and `cert.pem`
+
+- `openssl req -newkey rsa:2048 -nodes -keyout ./AnalysisNode/app/key.pem -x509 -days 365 -out ./AnalysisNode/app/cert.pem`
+
 ### Build Image
 
 - mysql database `docker build -t mysql AnalysisNode/mysql`
@@ -22,8 +27,9 @@ You will first need to build each image and create a network to connect each ima
 - sensor:
     `docker run -itp 5001:5001 --network analysis_net -e SENSOR='Sensor Name' sensor`
 
+
 *Note:
-    to achieve this architecture you will need to duplicate the DataSourceNode sensor image on a different vm and give its own environment name which the app will use as the name of the sensor.
+    to achieve this architecture you will need to duplicate the DataSourceNode sensor image on a different vm and give its own environment name which the app will use as the name of the sensor. ie `docker run -dp 5002:5001 -e SENSOR='Sensor Name' sensor2`
 
 ![Alt Text](iot.png)
 

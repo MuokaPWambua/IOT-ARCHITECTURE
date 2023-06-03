@@ -6,15 +6,16 @@ from utils import *
 from flask_cors import CORS
 import eventlet
 from eventlet import wsgi
+from eventlet import wrap_ssl
 
 app = Flask(__name__)
 CORS(app)
 
-SECRET_KEY = os.environ.get('SECRET_KEY','your-secret-key')
-HOST = os.environ.get('HOST','mysql')
-USER = os.environ.get('USER','app')
-PASSWORD = os.environ.get('PASSWORD','userpassword')
-DB = os.environ.get('DB','analysis')
+SECRET_KEY = os.getenv('SECRET_KEY','your-secret-key')
+HOST = os.getenv('HOST','mysql')
+USER = os.getenv('USER','app')
+PASSWORD = os.getenv('PASSWORD','userpassword')
+DB = os.getenv('DB','analysis')
 
 app.config['SECRET_KEY'] = SECRET_KEY
 
@@ -56,7 +57,7 @@ def index():
                 humidity_average=avg_humid,
                 temperature_average=avg_temp)
     except Exception as e: 
-        return render_template('index.html', data=[], humidity_average=25, temperature_average=15)
+        return render_template('index.html', data=[], humidity_average=0, temperature_average=0)
 
 @socketio.on('connect')
 def handle_connect():
@@ -76,4 +77,19 @@ def handle_sensor_data(data):
         
         
 if __name__ == '__main__':
-    wsgi.server(eventlet.listen(('', 5000)), app)
+    import ssl
+    
+    # Create the SSL/TLS context
+    certfile = 'cert.pem'
+    keyfile = 'key.pem'
+    ssl_context = ssl.create_default_context(ssl.Purpose.CLIENT_AUTH)
+    ssl_context.load_cert_chain(certfile, keyfile)
+    
+    # Create the WSGI server without SSL/TLS
+    server = eventlet.listen(('0.0.0.0', 5000))
+
+    # Wrap the server with SSL/TLS
+    server = wrap_ssl(server, certfile=certfile, keyfile=keyfile, server_side=True, ssl_version=ssl.PROTOCOL_TLS)
+
+    # Start the server
+    wsgi.server(server, application)

@@ -1,12 +1,14 @@
+import ssl
 import time
 import socketio
 from utils import humidity, temperature
 import os
 
 sensor_id = os.environ.get('SENSOR', 'SENSOR ID')
-host = os.environ.get('HOST', 'http://webapp:5000') # analysis node vm ip
+host = os.getenv('HOST', 'wss://webapp:5000') # analysis node vm ip
 
-sio = socketio.Client()
+sio = socketio.Client(ssl_verify=False)
+
 
 @sio.event
 def connect():
